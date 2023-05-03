@@ -31,9 +31,10 @@ public class UserController {
     }
 
     @PutMapping
-    public void change(@RequestBody @Valid User user) {
+    public User change(@RequestBody @Valid User user) {
         validate(user);
         users.put(user.getId(), user);
+        return user;
     }
 
     private void validate(User user) {

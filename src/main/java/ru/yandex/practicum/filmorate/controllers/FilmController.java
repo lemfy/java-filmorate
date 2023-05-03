@@ -32,10 +32,11 @@ public class FilmController {
     }
 
     @PutMapping
-    public void change(@RequestBody @Valid Film film) {
+    public Film change(@RequestBody @Valid Film film) {
         validate(film);
         film.setId(film.getId());
         films.put(film.getId(), film);
+        return film;
     }
 
     public void validate(Film film) {
