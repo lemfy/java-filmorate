@@ -28,6 +28,7 @@ public class User {
         this.birthday = birthday;
     }
 
+
     public User(String email, String login, LocalDate birthday) {
         this.email = email;
         this.login = login;
