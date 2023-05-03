@@ -13,27 +13,27 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FilmTests {
     FilmController filmController = new FilmController();
 
-    Film film1 = new Film("AAA", "AAA",
+    Film film1 = new Film(1, "AAA", "AAA",
             LocalDate.of(2000, 1, 1), 1);
-    Film film2 = new Film("BBB", "BBB",
+    Film film2 = new Film(2, "BBB", "BBB",
             LocalDate.of(2000, 1, 2), 2);
-    Film film3 = new Film("", "CCC",
+    Film film3 = new Film(3, "", "CCC",
             LocalDate.of(2000, 1, 3), 3);
-    Film film4 = new Film("DDD", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
+    Film film4 = new Film(4, "DDD", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
             "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
             "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
             LocalDate.of(2000, 1, 4), 4);
-    Film film5 = new Film("EEE", "EEE",
+    Film film5 = new Film(5, "EEE", "EEE",
             LocalDate.of(1000, 1, 5), 5);
-    Film film6 = new Film("FFF", "FFF",
+    Film film6 = new Film(6, "FFF", "FFF",
             LocalDate.of(2000, 1, 5), 0);
-    Film film7 = new Film("GGG", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
+    Film film7 = new Film(7, "GGG", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
             "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
             "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
             LocalDate.of(2000, 1, 7), 7);
-    Film film8 = new Film("GGG", "GGG",
+    Film film8 = new Film(8, "GGG", "GGG",
             LocalDate.of(1895, 12, 28), 5);
-    Film film9 = new Film("HHH", "HHH",
+    Film film9 = new Film(9, "HHH", "HHH",
             LocalDate.of(2000, 1, 9), -10);
 
     @Test

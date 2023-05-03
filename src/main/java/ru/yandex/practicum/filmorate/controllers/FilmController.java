@@ -4,12 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -20,15 +19,16 @@ public class FilmController {
 
 
     @GetMapping
-    public Collection<Film> allFilms() {
-        return films.values();
+    public List<Film> allFilms() {
+        return new ArrayList<>(films.values());
     }
 
     @PostMapping
-    public void create(@RequestBody @Valid Film film) {
+    public Film create(@RequestBody @Valid Film film) {
         validate(film);
         film.setId(id++);
         films.put(film.getId(), film);
+        return film;
     }
 
     @PutMapping

@@ -12,19 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
     UserController userController = new UserController();
-    User user1 = new User(1,"AAA@ya.ru", "AAA", "",
+    User user1 = new User(1, "AAA@ya.ru", "AAA", "",
             LocalDate.of(2000, 1, 1));
-    User user2 = new User(2,"BBB@ya.ru", "BBB", "BBB",
+    User user2 = new User(2, "BBB@ya.ru", "BBB", "BBB",
             LocalDate.of(2000, 1, 2));
-    User user3 = new User(3,"", "CCC", "CCC",
+    User user3 = new User(3, "", "CCC", "CCC",
             LocalDate.of(2000, 1, 2));
-    User user4 = new User(4,"DDD@ya.ru", "", "DDD",
+    User user4 = new User(4, "DDD@ya.ru", "", "DDD",
             LocalDate.of(2000, 1, 4));
-    User user5 = new User(5,"EEE@ya.ru", "E E", "EEE",
+    User user5 = new User(5, "EEE@ya.ru", "E E", "EEE",
             LocalDate.of(2000, 1, 5));
-    User user6 = new User(6,"FFF@ya.ru", "FFF", "FFF",
+    User user6 = new User(6, "FFF@ya.ru", "FFF", "FFF",
             LocalDate.of(2030, 1, 6));
-    User user7 = new User(7,"GGG@ya.ru", "GGG", "GGG",
+    User user7 = new User(7, "GGG@ya.ru", "GGG", "GGG",
             LocalDate.now());
 
     @Test
