@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class Film {
-    private int id;
+    private Integer id;
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
     @NotNull
@@ -20,7 +20,8 @@ public class Film {
     private LocalDate releaseDate;
     @NotNull
     @Positive
-    private int durations;
+    private Integer durations;
+
 
     public Film(String name, String description, LocalDate releaseDate, int durations) {
         this.name = name;
@@ -28,4 +29,13 @@ public class Film {
         this.releaseDate = releaseDate;
         this.durations = durations;
     }
+/*
+    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer durations) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.durations = durations;
+    }
+ */
 }

@@ -1,16 +1,17 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 
 @Slf4j
 @RestController
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User change(@RequestBody @Valid User user) {
+    public User change(@NotNull @RequestBody @Valid User user) {
         validate(user);
         user.setId(user.getId());
         users.put(user.getEmail(), user);
