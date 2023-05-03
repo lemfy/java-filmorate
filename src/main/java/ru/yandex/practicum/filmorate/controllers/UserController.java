@@ -25,16 +25,25 @@ public class UserController {
 
     @PostMapping
     public void create(@RequestBody @Valid User user) {
+        if (users.containsKey(user.getId())) {
+            log.error("User {} already exists", user.getName());
+            throw new ValidationException("User already exists");
+        }
         validate(user);
         user.setId(id++);
         users.put(user.getId(), user);
     }
 
     @PutMapping
-    public User change(@RequestBody @Valid User user) {
-        validate(user);
-        users.put(user.getId(), user);
-        return user;
+    public void change(@RequestBody @Valid User user) {
+        if (users.containsKey(user.getId())) {
+            validate(user);
+            users.put(user.getId(), user);
+            log.debug("User {} data updated.", user.getId());
+        } else {
+            log.debug("Key {} not found", user.getId());
+            throw new ValidationException("User not found");
+        }
     }
 
     private void validate(User user) {
