@@ -11,15 +11,12 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class Film {
     @Min(value = 0)
-    private Integer id;
+    private int id;
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
-    @NotNull
     @Size(max = 200)
     private String description;
-    @NotNull
     private LocalDate releaseDate;
-    @NotNull
     @Positive
-    private Integer durations;
+    private int duration;
 }

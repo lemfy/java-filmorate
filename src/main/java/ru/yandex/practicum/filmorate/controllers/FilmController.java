@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film create(@RequestBody @Valid Film film) {
+    public Film create(@NotNull @RequestBody @Valid Film film) {
         validate(film);
         film.setId(id++);
         films.put(film.getId(), film);
@@ -34,10 +35,13 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film change(@RequestBody @Valid Film film) {
-        validate(film);
-        film.setId(film.getId());
-        films.put(film.getId(), film);
+    public Film change(@NotNull @RequestBody @Valid Film film) {
+        if (films.containsKey(film.getId())) {
+            validate(film);
+            films.put(film.getId(), film);
+        } else {
+            throw new ValidationException("Фильм не найден");
+        }
         return film;
     }
 
@@ -45,13 +49,13 @@ public class FilmController {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }
-        if (film.getName().isBlank()) {
+        if (film.getName() == null || film.getName().isEmpty() || film.getName().isBlank()) {
             throw new ValidationException("Имя не может быть пустым");
         }
         if ((film.getDescription().length()) > 200) {
             throw new ValidationException("Описание фильма больше 200 символов");
         }
-        if (film.getDurations() <= 0) {
+        if (film.getDuration() <= 0) {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
     }
