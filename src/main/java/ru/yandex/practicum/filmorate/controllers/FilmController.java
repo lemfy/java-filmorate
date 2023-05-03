@@ -25,19 +25,17 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film create(@RequestBody @Valid Film film) {
+    public void create(@RequestBody @Valid Film film) {
         validate(film);
         film.setId(id++);
         films.put(film.getId(), film);
-        return film;
     }
 
     @PutMapping
-    public Film change(@RequestBody @Valid Film film) {
+    public void change(@RequestBody @Valid Film film) {
         validate(film);
         film.setId(film.getId());
         films.put(film.getId(), film);
-        return film;
     }
 
     public void validate(Film film) {

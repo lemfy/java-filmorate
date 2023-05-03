@@ -24,18 +24,16 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody @Valid User user) {
+    public void create(@RequestBody @Valid User user) {
         validate(user);
         user.setId(id++);
         users.put(user.getId(), user);
-        return user;
     }
 
     @PutMapping
-    public User change(@RequestBody @Valid User user) {
+    public void change(@RequestBody @Valid User user) {
         validate(user);
         users.put(user.getId(), user);
-        return user;
     }
 
     private void validate(User user) {
