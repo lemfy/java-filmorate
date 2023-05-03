@@ -13,34 +13,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/films")
 public class FilmController {
     private final Logger filmLog = LoggerFactory.getLogger(FilmController.class);
     int id = 1;
     private final Map<String, Film> films = new HashMap<>();
 
 
-    @GetMapping("/films")
+    @GetMapping
     public Collection<Film> allFilms() {
         return films.values();
     }
 
-    @PostMapping("/film")
+    @PostMapping
     public Film create(@RequestBody @Valid Film film) {
-        validation(film);
+        validate(film);
         film.setId(id++);
         films.put(film.getName(), film);
         return film;
     }
 
-    @PutMapping("/film")
+    @PutMapping
     public Film change(@RequestBody @Valid Film film) {
-        validation(film);
+        validate(film);
         film.setId(film.getId());
         films.put(film.getName(), film);
         return film;
     }
 
-    public void validation(Film film) {
+    public void validate(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }

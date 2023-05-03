@@ -13,24 +13,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
     private final Logger userLog = LoggerFactory.getLogger(FilmController.class);
     int id = 1;
     public Map<String, User> users = new HashMap<>();
 
-    @GetMapping("/users")
+    @GetMapping
     public Collection<User> allUsers() {
         return users.values();
     }
 
-    @PostMapping("/user")
+    @PostMapping
     public void create(@RequestBody @Valid User user) {
         validate(user);
         user.setId(id++);
         users.put(user.getEmail(), user);
     }
 
-    @PutMapping("/user")
+    @PutMapping
     public User change(@RequestBody @Valid User user) {
         validate(user);
         user.setId(user.getId());
