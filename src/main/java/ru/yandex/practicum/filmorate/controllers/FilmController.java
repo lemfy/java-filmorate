@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 public class FilmController {
-    private final static Logger filmLog = LoggerFactory.getLogger(FilmController.class);
+    private final Logger filmLog = LoggerFactory.getLogger(FilmController.class);
     int id = 1;
     private final Map<String, Film> films = new HashMap<>();
 
@@ -26,7 +26,7 @@ public class FilmController {
 
     @PostMapping("/film")
     public Film create(@RequestBody @Valid Film film) {
-        Validation(film);
+        validation(film);
         film.setId(id++);
         films.put(film.getName(), film);
         return film;
@@ -34,13 +34,13 @@ public class FilmController {
 
     @PutMapping("/film")
     public Film change(@RequestBody @Valid Film film) {
-        Validation(film);
+        validation(film);
         film.setId(film.getId());
         films.put(film.getName(), film);
         return film;
     }
 
-    public void Validation(Film film) {
+    public void validation(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }
