@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 public class UserController {
-    private final static Logger userLog = LoggerFactory.getLogger(FilmController.class);
+    private final Logger userLog = LoggerFactory.getLogger(FilmController.class);
     int id = 1;
     public Map<String, User> users = new HashMap<>();
 
@@ -25,20 +25,20 @@ public class UserController {
 
     @PostMapping("/user")
     public void create(@RequestBody @Valid User user) {
-        Validation(user);
+        validate(user);
         user.setId(id++);
         users.put(user.getEmail(), user);
     }
 
     @PutMapping("/user")
     public User change(@RequestBody @Valid User user) {
-        Validation(user);
+        validate(user);
         user.setId(user.getId());
         users.put(user.getEmail(), user);
         return user;
     }
 
-    private void Validation(User user) {
+    private void validate(User user) {
         if ((user.getEmail().isBlank() || !user.getEmail().contains("@"))) {
             throw new ValidationException("Имейл не может быть пустым или не содержать символ @");
         }
