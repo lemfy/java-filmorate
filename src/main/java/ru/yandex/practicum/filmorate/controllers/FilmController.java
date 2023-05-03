@@ -15,8 +15,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    int id = 1;
-    private final Map<String, Film> films = new HashMap<>();
+    private int id = 1;
+    private final Map<Integer, Film> films = new HashMap<>();
 
 
     @GetMapping
@@ -28,7 +28,7 @@ public class FilmController {
     public Film create(@RequestBody @Valid Film film) {
         validate(film);
         film.setId(id++);
-        films.put(film.getName(), film);
+        films.put(film.getId(), film);
         return film;
     }
 
@@ -36,7 +36,7 @@ public class FilmController {
     public Film change(@RequestBody @Valid Film film) {
         validate(film);
         film.setId(film.getId());
-        films.put(film.getName(), film);
+        films.put(film.getId(), film);
         return film;
     }
 

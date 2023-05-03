@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,8 +15,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    int id = 1;
-    public Map<String, User> users = new HashMap<>();
+    private int id = 1;
+    public Map<Integer, User> users = new HashMap<>();
 
     @GetMapping
     public Collection<User> allUsers() {
@@ -25,17 +24,16 @@ public class UserController {
     }
 
     @PostMapping
-    public void create(@NotNull @RequestBody @Valid User user) {
+    public void create(@RequestBody @Valid User user) {
         validate(user);
         user.setId(id++);
-        users.put(user.getEmail(), user);
+        users.put(user.getId(), user);
     }
 
     @PutMapping
-    public User change(@NotNull @RequestBody @Valid User user) {
+    public User change(@RequestBody @Valid User user) {
         validate(user);
-        user.setId(user.getId());
-        users.put(user.getEmail(), user);
+        users.put(user.getId(), user);
         return user;
     }
 
