@@ -29,13 +29,4 @@ public class Film {
         this.releaseDate = releaseDate;
         this.durations = durations;
     }
-/*
-    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer durations) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.durations = durations;
-    }
- */
 }
