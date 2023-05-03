@@ -1,10 +1,17 @@
 package ru.yandex.practicum.filmorate;
 
+import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.UserController;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.model.User;
+
+import java.time.LocalDate;
+import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
     UserController userController = new UserController();
-/*
     User user1 = new User("AAA@ya.ru", "AAA", "",
             LocalDate.of(2000, 1, 1));
     User user2 = new User("BBB@ya.ru", "BBB", "BBB",
@@ -79,6 +86,4 @@ public class UserTests {
         assertThrows(ValidationException.class, () -> userController.create(user7));
         assertFalse(userController.allUsers().contains(user7));
     }
-
- */
 }

@@ -24,10 +24,11 @@ public class UserController {
     }
 
     @PostMapping
-    public void create(@RequestBody @Valid User user) {
+    public User create(@RequestBody @Valid User user) {
         validate(user);
         user.setId(id++);
         users.put(user.getId(), user);
+        return user;
     }
 
     @PutMapping
