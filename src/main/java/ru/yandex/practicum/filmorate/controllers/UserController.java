@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void create(@RequestBody @Valid User user) {
+    public void create(@NotNull @RequestBody @Valid User user) {
         validate(user);
         user.setId(id++);
         users.put(user.getEmail(), user);
