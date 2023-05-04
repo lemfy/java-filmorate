@@ -23,23 +23,29 @@ public class FilmController {
 
     @GetMapping
     public List<Film> allFilms() {
+        log.debug("List size {}", films.size());
         return new ArrayList<>(films.values());
     }
 
     @PostMapping
     public Film create(@NotNull @RequestBody @Valid Film film) {
+        log.info("Post request {}", film);
         validate(film);
         film.setId(id++);
         films.put(film.getId(), film);
+        log.info("Film added {}", film);
         return film;
     }
 
     @PutMapping
     public Film change(@NotNull @RequestBody @Valid Film film) {
+        log.info("Put request: {}", film);
         if (films.containsKey(film.getId())) {
             validate(film);
             films.put(film.getId(), film);
+            log.info("Film changed {}", film);
         } else {
+            log.debug("Key not found {}", film.getId());
             throw new ValidationException("Фильм не найден");
         }
         return film;
@@ -47,15 +53,19 @@ public class FilmController {
 
     public void validate(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            log.error("Film releaseDate is invalid. {}", film.getName());
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }
         if (film.getName() == null || film.getName().isEmpty() || film.getName().isBlank()) {
+            log.error("Film name is empty or invalid. {}", film.getId());
             throw new ValidationException("Имя не может быть пустым");
         }
         if ((film.getDescription().length()) > 200) {
+            log.error("Film description is too long. {}", film.getName());
             throw new ValidationException("Описание фильма больше 200 символов");
         }
         if (film.getDuration() <= 0) {
+            log.error("Film duration is negative. {}", film.getName());
             throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
     }
