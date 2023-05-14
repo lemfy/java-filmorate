@@ -45,12 +45,13 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User addFriend(int userId, int friendId) {
-        if (!users.containsKey(id)) {
-            throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", id));
+        if (!users.containsKey(userId)) {
+            throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", userId));
         }
         if (!users.containsKey(friendId)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", friendId));
         }
+
         User firstUser = users.get(userId);
         firstUser.getFriends().add(friendId);
         users.put(firstUser.getId(), firstUser);
@@ -63,8 +64,8 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User removeFriend(int userId, int friendId) {
-        if (!users.containsKey(id)) {
-            throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", id));
+        if (!users.containsKey(userId)) {
+            throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", userId));
         }
         if (!users.containsKey(friendId)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", friendId));

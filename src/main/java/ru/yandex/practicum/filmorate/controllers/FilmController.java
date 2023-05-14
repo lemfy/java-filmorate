@@ -64,7 +64,7 @@ public class FilmController {
         return filmService.removeLike(filmId, userId);
     }
 
-    @GetMapping("/films/popularity")
+    @GetMapping("/films/popular")
     public List<Film> getBestFilms(
             @RequestParam(value = "count", defaultValue = "10", required = false) int count) {
         return filmService.getBestFilms(count);
