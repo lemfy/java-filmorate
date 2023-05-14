@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
 
-@Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private int id = 1;
@@ -54,7 +53,6 @@ public class InMemoryUserStorage implements UserStorage {
 
         users.get(userId).getFriends().add(friendId);
         users.get(friendId).getFriends().add(userId);
-        log.info("Пользователь с id {} добавил в кореша пользователя с id {}", userId, friendId);
         return users.get(userId);
     }
 
@@ -69,7 +67,6 @@ public class InMemoryUserStorage implements UserStorage {
 
         users.get(userId).getFriends().remove(friendId);
         users.get(friendId).getFriends().remove(userId);
-        log.info("Пользователь с id {} удалил из корешей пользователя с id {}", userId, friendId);
         return users.get(userId);
     }
 
