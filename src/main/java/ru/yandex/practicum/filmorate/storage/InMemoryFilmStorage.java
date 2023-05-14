@@ -3,15 +3,15 @@ package ru.yandex.practicum.filmorate.storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.model.ComparatorOfPopularity;
 import ru.yandex.practicum.filmorate.model.Film;
+
+import static java.lang.Integer.compare;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private final ComparatorOfPopularity comparatorOfPopularity = new ComparatorOfPopularity();
     private final UserStorage userStorage;
     private int id = 1;
     private final Map<Integer, Film> films = new HashMap<>();
@@ -81,6 +81,12 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getBestFilms(int count) {
-        return findAllFilms().stream().sorted(comparatorOfPopularity).limit(count).collect(Collectors.toList());
+        List<Film> topFilms = findAllFilms();
+        return topFilms.stream()
+                .sorted((o1, o2) -> {
+                    int comp = compare(o1.getLikes().size(), o2.getLikes().size());
+                    return -1 * comp;
+                }).limit(count)
+                .collect(Collectors.toList());
     }
 }

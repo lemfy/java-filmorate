@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private int id = 1;
@@ -16,6 +19,7 @@ public class InMemoryUserStorage implements UserStorage {
         user.setId(id++);
         user.setFriends(new HashSet<>());
         users.put(user.getId(), user);
+        log.info("user added");
         return users.get(user.getId());
     }
 
@@ -24,7 +28,10 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(id)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", id));
         }
+        Set<Integer> friends = users.get(id).getFriends();
         users.put(user.getId(), user);
+        user.setFriends(friends);
+        log.info("user changed");
         return users.get(user.getId());
     }
 
@@ -38,6 +45,7 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(id)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", id));
         }
+        log.info("currently user found");
         return users.get(id);
     }
 
@@ -52,6 +60,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         users.get(userId).getFriends().add(friendId);
         users.get(friendId).getFriends().add(userId);
+        log.info("Пользователь с id: {} добавил в друзья пользователя с id: {}", userId, friendId);
         return users.get(userId);
     }
 
@@ -66,6 +75,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         users.get(userId).getFriends().remove(friendId);
         users.get(friendId).getFriends().remove(userId);
+        log.info("Пользователь с id: {} удалил из друзей пользователя с id: {}", userId, friendId);
         return users.get(userId);
     }
 
@@ -74,13 +84,10 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(id)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", id));
         }
-        User user = users.get(id);
-        List<Integer> friendListId = new ArrayList<>(user.getFriends());
-        List<User> friendList = new ArrayList<>();
-        for (Integer friends : friendListId) {
-            friendList.add(users.get(friends));
-        }
-        return friendList;
+        Set<Integer> userFriends = users.get(id).getFriends();
+        return userFriends.stream()
+                .map(users::get)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -91,17 +98,11 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(secondUserId)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", secondUserId));
         }
-        User firstUser = users.get(firstUserId);
-        List<Integer> firstUserFriendListId = new ArrayList<>(firstUser.getFriends());
-        User secondUser = users.get(secondUserId);
-        List<Integer> secondUserFriendListId = new ArrayList<>(secondUser.getFriends());
-
-        List<User> commonFriends = new ArrayList<>();
-        for (Integer friendId : firstUserFriendListId) {
-            if (secondUserFriendListId.contains(friendId)) {
-                commonFriends.add(users.get(friendId));
-            }
-        }
-        return commonFriends;
+        Set<Integer> firstUserFriends = users.get(firstUserId).getFriends();
+        Set<Integer> secondUserFriends = users.get(secondUserId).getFriends();
+        return firstUserFriends.stream()
+                .filter(secondUserFriends::contains)
+                .map(users::get)
+                .collect(Collectors.toList());
     }
 }
