@@ -2,12 +2,19 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
+@Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class Film {
     @Min(value = 0)
@@ -19,4 +26,5 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
+    private Set<Integer> likes = new HashSet<>();
 }
