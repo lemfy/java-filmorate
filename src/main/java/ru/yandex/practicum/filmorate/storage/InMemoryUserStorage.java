@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
-import ru.yandex.practicum.filmorate.model.ComparatorOfPopularity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
     private final int id = 1;
     public Map<Integer, User> users = new HashMap<>();
 
