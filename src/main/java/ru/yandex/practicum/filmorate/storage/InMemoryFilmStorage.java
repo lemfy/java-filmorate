@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
@@ -10,6 +11,7 @@ import static java.lang.Integer.compare;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final UserStorage userStorage;
@@ -26,6 +28,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         film.setId(id++);
         films.put(film.getId(), film);
         film.setLikes(new HashSet<>());
+        log.info("film added");
         return films.get(film.getId());
     }
 
@@ -35,6 +38,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new FilmNotFoundException(String.format("Фильма с id %d не существует.", id));
         }
         films.put(film.getId(), film);
+        log.info("film changed");
         return films.get(film.getId());
     }
 
@@ -48,6 +52,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (!films.containsKey(id)) {
             throw new FilmNotFoundException(String.format("Фильма с id %d не существует.", id));
         }
+        log.info("currently film found");
         return films.get(id);
     }
 
@@ -62,6 +67,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         Film film = films.get(filmId);
         film.getLikes().add(userId);
         films.put(film.getId(), film);
+        log.info("like added");
         return films.get(filmId);
     }
 
@@ -76,12 +82,14 @@ public class InMemoryFilmStorage implements FilmStorage {
         Film film = films.get(filmId);
         film.getLikes().remove(userId);
         films.put(film.getId(), film);
+        log.info("like removed");
         return films.get(filmId);
     }
 
     @Override
     public List<Film> getBestFilms(int count) {
         List<Film> topFilms = findAllFilms();
+        log.info("best films list added");
         return topFilms.stream()
                 .sorted((o1, o2) -> {
                     int comp = compare(o1.getLikes().size(), o2.getLikes().size());
