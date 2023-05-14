@@ -1,14 +1,13 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private int id = 1;
@@ -17,6 +16,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User createUser(User user) {
         user.setId(id++);
+        user.setFriends(new HashSet<>());
         users.put(user.getId(), user);
         return users.get(user.getId());
     }
@@ -52,14 +52,10 @@ public class InMemoryUserStorage implements UserStorage {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", friendId));
         }
 
-        User firstUser = users.get(userId);
-        firstUser.getFriends().add(friendId);
-        users.put(firstUser.getId(), firstUser);
-
-        User secondUser = users.get(friendId);
-        secondUser.getFriends().add(userId);
-        users.put(secondUser.getId(), secondUser);
-        return firstUser;
+        users.get(userId).getFriends().add(friendId);
+        users.get(friendId).getFriends().add(userId);
+        log.info("Пользователь с id {} добавил в кореша пользователя с id {}", userId, friendId);
+        return users.get(userId);
     }
 
     @Override
@@ -70,14 +66,11 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(friendId)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", friendId));
         }
-        User firstUser = users.get(userId);
-        firstUser.getFriends().remove(friendId);
-        users.put(firstUser.getId(), firstUser);
 
-        User secondUser = users.get(friendId);
-        secondUser.getFriends().remove(userId);
-        users.put(secondUser.getId(), secondUser);
-        return firstUser;
+        users.get(userId).getFriends().remove(friendId);
+        users.get(friendId).getFriends().remove(userId);
+        log.info("Пользователь с id {} удалил из корешей пользователя с id {}", userId, friendId);
+        return users.get(userId);
     }
 
     @Override
