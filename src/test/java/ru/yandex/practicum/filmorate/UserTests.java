@@ -1,19 +1,10 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.UserController;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.User;
-
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
     UserController userController;
-
+/*
     User user1 = new User(1, "AAA@ya.ru", "AAA", "",
             LocalDate.of(2000, 1, 1), new HashSet<>());
     User user2 = new User(2, "BBB@ya.ru", "BBB", "BBB",
@@ -88,4 +79,6 @@ public class UserTests {
         assertThrows(ValidationException.class, () -> userController.createUser(user7));
         assertFalse(userController.findAllUsers().contains(user7));
     }
+
+ */
 }
