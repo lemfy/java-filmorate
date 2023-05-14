@@ -1,15 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.controllers.FilmController;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
-
-import java.time.LocalDate;
-import java.util.Collection;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class FilmTests {
     /*
     FilmController filmController = new FilmController();
