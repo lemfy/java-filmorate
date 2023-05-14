@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import static java.lang.Integer.compare;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,12 +87,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Film> getBestFilms(int count) {
         List<Film> topFilms = findAllFilms();
-        log.info("best films list added");
-        return topFilms.stream()
-                .sorted((o1, o2) -> {
-                    int comp = compare(o1.getLikes().size(), o2.getLikes().size());
-                    return -1 * comp;
-                }).limit(count)
+        log.info("best films list found");
+        return findAllFilms().stream().sorted(Comparator.comparingInt(Film::getLikeSize).reversed())
+                .limit(count)
                 .collect(Collectors.toList());
     }
 }

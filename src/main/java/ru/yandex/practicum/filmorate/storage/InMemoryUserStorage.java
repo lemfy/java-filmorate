@@ -85,6 +85,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", id));
         }
         Set<Integer> userFriends = users.get(id).getFriends();
+        log.info("all friends found");
         return userFriends.stream()
                 .map(users::get)
                 .collect(Collectors.toList());
@@ -100,6 +101,7 @@ public class InMemoryUserStorage implements UserStorage {
         }
         Set<Integer> firstUserFriends = users.get(firstUserId).getFriends();
         Set<Integer> secondUserFriends = users.get(secondUserId).getFriends();
+        log.info("common friends found");
         return firstUserFriends.stream()
                 .filter(secondUserFriends::contains)
                 .map(users::get)
