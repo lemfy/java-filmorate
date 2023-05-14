@@ -48,6 +48,7 @@ public class FilmController {
         log.info("Film changed {}", film);
         return filmService.changeFilm(film.getId(), film);
     }
+
     @GetMapping("/films/{id}")
     public Film findFilmById(@PathVariable int id) {
         return filmService.findFilmById(id);
