@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -21,4 +22,5 @@ public class User {
     private String name;
     @Past
     private LocalDate birthday;
+    private Set<Integer> friends;
 }
