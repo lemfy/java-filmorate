@@ -27,7 +27,7 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
 
     @Override
-    public Friends AddFriend(Friends Friends) {
+    public Friends addFriend(Friends Friends) {
         String sql = "insert into Friends (UserID, FriendID, Status) values(?, ?, ?)";
         jdbcTemplate.update(sql,
                 Friends.getUserId(),

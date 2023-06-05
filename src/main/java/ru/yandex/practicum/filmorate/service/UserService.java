@@ -42,7 +42,7 @@ public class UserService {
         var friends = friendsStorage.findCommonFriends(userId, friendId);
         if (friends == null) {
             try {
-                return friendsStorage.AddFriend(new Friends(userId, friendId, false));
+                return friendsStorage.addFriend(new Friends(userId, friendId, false));
             } catch (Exception e) {
                 throw new UserNotFoundException("Нет данных о ждужбе");
             }

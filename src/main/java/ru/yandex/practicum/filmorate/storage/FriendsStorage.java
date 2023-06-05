@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.Friends;
 import java.util.List;
 
 public interface FriendsStorage {
-    Friends AddFriend(Friends friend);
+    Friends addFriend(Friends friend);
 
     boolean deleteFriend(Friends friend);
 
