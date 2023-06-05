@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    private final MpaStorage MpaStorage;
+    private final MpaStorage mpaStorage;
     private final GenreStorage genreStorage;
     private final LikesStorage likesStorage;
     private final FilmGenreStorage filmGenreStorage;
     private final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage, MpaStorage MpaStorage,
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage, MpaStorage mpaStorage,
                        GenreStorage genreStorage, LikesStorage likesStorage, FilmGenreStorage filmGenreStorage) {
         this.filmStorage = filmStorage;
-        this.MpaStorage = MpaStorage;
+        this.mpaStorage = mpaStorage;
         this.genreStorage = genreStorage;
         this.likesStorage = likesStorage;
         this.filmGenreStorage = filmGenreStorage;
@@ -42,7 +42,7 @@ public class FilmService {
 
     public List<Film> findAllFilms() {
         var films = filmStorage.findAllFilms();
-        var mpaList = MpaStorage.getAllMpa();
+        var mpaList = mpaStorage.getAllMpa();
         var genres = genreStorage.getAllGenres();
         var filmGenres = filmGenreStorage.getAllFilmGenre();
         var likes = likesStorage.getAllLikes();
@@ -55,7 +55,7 @@ public class FilmService {
     public Film findFilmById(int filmId) {
         var film = filmStorage.findFilmById(filmId);
 
-        var mpaList = MpaStorage.getAllMpa();
+        var mpaList = mpaStorage.getAllMpa();
         var genres = genreStorage.getAllGenres();
         var filmGenres = filmGenreStorage.getLikesFilmId(film.getId());
         var likes = likesStorage.getLikesWithFilmId(film.getId());
@@ -96,11 +96,11 @@ public class FilmService {
     }
 
     public Mpa getMpa(int id) {
-        return MpaStorage.getMpaById(id);
+        return mpaStorage.getMpaById(id);
     }
 
     public List<Mpa> getMpaList() {
-        var mpaList = MpaStorage.getAllMpa();
+        var mpaList = mpaStorage.getAllMpa();
         List<Mpa> list = new ArrayList<>(mpaList);
         list.sort(Comparator.comparing(Mpa::getId));
         return list;
@@ -119,7 +119,7 @@ public class FilmService {
         }
     }
     private void setAllPar(Film film, Set<Mpa> mpaList, List<Genres> genres,
-                                         List<FilmGenre> filmGenres, Set<Likes> likes) {
+                           List<FilmGenre> filmGenres, Set<Likes> likes) {
         List<Genres> genreByFilm = new ArrayList<>();
         filmGenres.stream().filter(f -> f.getFilmId() == film.getId())
                 .forEach(f -> genreByFilm.add(
