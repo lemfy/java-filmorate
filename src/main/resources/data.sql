@@ -1,5 +1,5 @@
 INSERT INTO Mpa(id, name)
-VALUES (1, 'G'),
+VALUES (1,'G'),
        (2, 'PG'),
        (3, 'PG-13'),
        (4, 'R'),
