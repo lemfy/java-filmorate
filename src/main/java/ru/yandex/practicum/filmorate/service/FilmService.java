@@ -118,6 +118,7 @@ public class FilmService {
             }
         }
     }
+
     private void setAllPar(Film film, Set<Mpa> mpaList, List<Genres> genres,
                            List<FilmGenre> filmGenres, Set<Likes> likes) {
         List<Genres> genreByFilm = new ArrayList<>();
