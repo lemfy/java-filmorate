@@ -33,9 +33,9 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
     @Override
     public Set<Likes> getAllLikes() {
         Set<Likes> likes = new HashSet<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes");
-        while (rowSet.next()) {
-            Likes like = mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes");
+        while (sqlRowSet.next()) {
+            Likes like = mapToRow(sqlRowSet);
             likes.add(like);
         }
         return likes;
@@ -44,9 +44,9 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
     @Override
     public Set<Likes> getLikesWithFilmId(int filmId) {
         Set<Likes> likes = new HashSet<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where FilmID = ?", filmId);
-        while (rowSet.next()) {
-            var like = mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where FilmID = ?", filmId);
+        while (sqlRowSet.next()) {
+            var like = mapToRow(sqlRowSet);
             likes.add(like);
         }
         return likes;
@@ -54,17 +54,17 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
 
     @Override
     public Likes getLikesCurrentUserWithFilmId(int userId, int filmId) {
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where UserID = ? AND FilmID = ?", userId, filmId);
-        if (rowSet.next()) {
-            return mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where UserID = ? AND FilmID = ?", userId, filmId);
+        if (sqlRowSet.next()) {
+            return mapToRow(sqlRowSet);
         } else {
             return null;
         }
     }
 
-    private Likes mapToRow(SqlRowSet rowSet) {
-        int userId = rowSet.getInt("UserID");
-        int filmId = rowSet.getInt("FilmID");
+    private Likes mapToRow(SqlRowSet sqlRowSet) {
+        int userId = sqlRowSet.getInt("UserID");
+        int filmId = sqlRowSet.getInt("FilmID");
         return Likes.builder()
                 .userId(userId)
                 .filmId(filmId)

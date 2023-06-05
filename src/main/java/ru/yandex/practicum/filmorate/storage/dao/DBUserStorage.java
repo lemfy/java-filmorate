@@ -110,8 +110,8 @@ public class DBUserStorage implements UserStorage {
         boolean friendAccepted;
         String sqlGetReversFriend = "select * from friends " +
                 "where UserID = ? and FriendID = ?";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
-        friendAccepted = rowSet.next();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
+        friendAccepted = sqlRowSet.next();
         String sqlSetFriend = "insert into friends (UserID, FriendID, Status) " +
                 "values (?,?,?)";
         jdbcTemplate.update(sqlSetFriend, userId, friendId, friendAccepted);

@@ -19,9 +19,9 @@ public class DBFilmGenreStorage extends DbStorage implements FilmGenreStorage {
     @Override
     public List<FilmGenre> getAllFilmGenre() {
         List<FilmGenre> filmGenres = new ArrayList<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select FilmID, GenreID from FilmGenre");
-        while (rowSet.next()) {
-            FilmGenre filmGenre = mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select FilmID, GenreID from FilmGenre");
+        while (sqlRowSet.next()) {
+            FilmGenre filmGenre = mapToRow(sqlRowSet);
             filmGenres.add(filmGenre);
         }
         return filmGenres;
@@ -30,9 +30,9 @@ public class DBFilmGenreStorage extends DbStorage implements FilmGenreStorage {
     @Override
     public List<FilmGenre> getLikesFilmId(int filmId) {
         List<FilmGenre> filmGenres = new ArrayList<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select FilmID, GenreID from FilmGenre where FilmID = ?", filmId);
-        while (rowSet.next()) {
-            var filmGenre = mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select FilmID, GenreID from FilmGenre where FilmID = ?", filmId);
+        while (sqlRowSet.next()) {
+            var filmGenre = mapToRow(sqlRowSet);
             filmGenres.add(filmGenre);
         }
         return filmGenres;
@@ -50,13 +50,13 @@ public class DBFilmGenreStorage extends DbStorage implements FilmGenreStorage {
 
     @Override
     public void deleteByFilmId(int filmId) {
-        var query = "delete from FilmGenre WHERE FilmID = ?";
-        jdbcTemplate.update(query, filmId);
+        var sqlRowSet = "delete from FilmGenre WHERE FilmID = ?";
+        jdbcTemplate.update(sqlRowSet, filmId);
     }
 
-    private FilmGenre mapToRow(SqlRowSet rowSet) {
-        int genreId = rowSet.getInt("GenreID");
-        int filmId = rowSet.getInt("FilmID");
+    private FilmGenre mapToRow(SqlRowSet sqlRowSet) {
+        int genreId = sqlRowSet.getInt("GenreID");
+        int filmId = sqlRowSet.getInt("FilmID");
         return FilmGenre.builder()
                 .genreId(genreId)
                 .filmId(filmId)

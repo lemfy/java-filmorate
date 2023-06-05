@@ -60,9 +60,9 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
     public List<Friends> findAllFriends(int id) {
         List<Friends> friends = new ArrayList<>();
         String sql = "select UserID, FriendID, Status from Friends where UserID = ? OR (FriendID = ? AND Status = ?)";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, id, id, true);
-        while (rowSet.next()) {
-            Friends Friends = mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id, id, true);
+        while (sqlRowSet.next()) {
+            Friends Friends = mapToRow(sqlRowSet);
             friends.add(Friends);
         }
         return friends;
@@ -79,10 +79,10 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
         }
     }
 
-    private Friends mapToRow(SqlRowSet rowSet) {
-        int userId = rowSet.getInt("UserID");
-        int FriendID = rowSet.getInt("FriendID");
-        boolean status = rowSet.getBoolean("Status");
+    private Friends mapToRow(SqlRowSet sqlRowSet) {
+        int userId = sqlRowSet.getInt("UserID");
+        int FriendID = sqlRowSet.getInt("FriendID");
+        boolean status = sqlRowSet.getBoolean("Status");
         return Friends.builder()
                 .userId(userId)
                 .friendId(FriendID)
