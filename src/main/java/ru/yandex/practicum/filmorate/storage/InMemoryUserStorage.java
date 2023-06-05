@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class InMemoryUserStorage implements UserStorage {
+public class InMemoryUserStorage {
     private int id = 1;
     private final Map<Integer, User> users = new HashMap<>();
-
+    /*
     @Override
     public User createUser(User user) {
         user.setId(id++);
@@ -50,7 +50,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User addFriend(int userId, int friendId) {
+    public void addFriend(int userId, int friendId) {
         if (!users.containsKey(userId)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", userId));
         }
@@ -61,11 +61,10 @@ public class InMemoryUserStorage implements UserStorage {
         users.get(userId).getFriends().add(friendId);
         users.get(friendId).getFriends().add(userId);
         log.info("Пользователь с id: {} добавил в друзья пользователя с id: {}", userId, friendId);
-        return users.get(userId);
     }
 
     @Override
-    public User removeFriend(int userId, int friendId) {
+    public void removeFriend(int userId, int friendId) {
         if (!users.containsKey(userId)) {
             throw new UserNotFoundException(String.format("Пользователя с id %d не существует.", userId));
         }
@@ -76,7 +75,6 @@ public class InMemoryUserStorage implements UserStorage {
         users.get(userId).getFriends().remove(friendId);
         users.get(friendId).getFriends().remove(userId);
         log.info("Пользователь с id: {} удалил из друзей пользователя с id: {}", userId, friendId);
-        return users.get(userId);
     }
 
     @Override
@@ -107,4 +105,5 @@ public class InMemoryUserStorage implements UserStorage {
                 .map(users::get)
                 .collect(Collectors.toList());
     }
+     */
 }

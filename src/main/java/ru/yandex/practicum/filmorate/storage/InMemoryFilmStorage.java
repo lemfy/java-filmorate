@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class InMemoryFilmStorage implements FilmStorage {
-    private final UserStorage userStorage;
+public class InMemoryFilmStorage {
+ //   private final UserStorage userStorage;
     private int id = 1;
     private final Map<Integer, Film> films = new HashMap<>();
-
+/*
     @Autowired
     public InMemoryFilmStorage(UserStorage userStorage) {
         this.userStorage = userStorage;
@@ -92,4 +92,5 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .limit(count)
                 .collect(Collectors.toList());
     }
+ */
 }
