@@ -97,9 +97,9 @@ public class DBUserStorage implements UserStorage {
 
     @Override
     public User findUserById(int id) {
-        String Query = "select id,login,email,name, birthday from users where id = ?";
+        String query = "select id,login,email,name, birthday from users where id = ?";
         try {
-            return jdbcTemplate.queryForObject(Query, userRowMapper, id);
+            return jdbcTemplate.queryForObject(query, userRowMapper, id);
         } catch (Exception e) {
             throw new UserNotFoundException("Пользователь не найден!");
         }
@@ -110,8 +110,8 @@ public class DBUserStorage implements UserStorage {
         boolean friendAccepted;
         String sqlGetReversFriend = "select * from friends " +
                 "where UserID = ? and FriendID = ?";
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
-        friendAccepted = RowSet.next();
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
+        friendAccepted = rowSet.next();
         String sqlSetFriend = "insert into friends (UserID, FriendID, Status) " +
                 "values (?,?,?)";
         jdbcTemplate.update(sqlSetFriend, userId, friendId, friendAccepted);

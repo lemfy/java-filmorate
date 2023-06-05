@@ -60,9 +60,9 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
     public List<Friends> findAllFriends(int id) {
         List<Friends> friends = new ArrayList<>();
         String sql = "select UserID, FriendID, Status from Friends where UserID = ? OR (FriendID = ? AND Status = ?)";
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet(sql, id, id, true);
-        while (RowSet.next()) {
-            Friends Friends = mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, id, id, true);
+        while (rowSet.next()) {
+            Friends Friends = mapToRow(rowSet);
             friends.add(Friends);
         }
         return friends;
@@ -71,18 +71,18 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
     @Override
     public Friends findCommonFriends(int user1Id, int user2Id) {
-        String Query = "select UserID, FriendID, Status from Friends where UserID = ? AND FriendID = ? OR UserID = ? AND FriendID = ?";
+        String query = "select UserID, FriendID, Status from Friends where UserID = ? AND FriendID = ? OR UserID = ? AND FriendID = ?";
         try {
-            return jdbcTemplate.queryForObject(Query, FriendsRowMapper, user1Id, user2Id, user2Id, user1Id);
+            return jdbcTemplate.queryForObject(query, FriendsRowMapper, user1Id, user2Id, user2Id, user1Id);
         } catch (Exception e) {
             return null;
         }
     }
 
-    private Friends mapToRow(SqlRowSet RowSet) {
-        int userId = RowSet.getInt("UserID");
-        int FriendID = RowSet.getInt("FriendID");
-        boolean status = RowSet.getBoolean("Status");
+    private Friends mapToRow(SqlRowSet rowSet) {
+        int userId = rowSet.getInt("UserID");
+        int FriendID = rowSet.getInt("FriendID");
+        boolean status = rowSet.getBoolean("Status");
         return Friends.builder()
                 .userId(userId)
                 .friendId(FriendID)

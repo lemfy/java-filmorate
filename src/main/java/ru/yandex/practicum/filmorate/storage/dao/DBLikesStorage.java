@@ -26,16 +26,16 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
 
     @Override
     public void removeLike(Likes likes) {
-        var Query = "delete from Likes where UserID = ? AND FilmID = ?";
-        jdbcTemplate.update(Query, likes.getUserId(), likes.getFilmId());
+        var query = "delete from Likes where UserID = ? AND FilmID = ?";
+        jdbcTemplate.update(query, likes.getUserId(), likes.getFilmId());
     }
 
     @Override
     public Set<Likes> getAllLikes() {
         Set<Likes> likes = new HashSet<>();
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes");
-        while (RowSet.next()) {
-            Likes like = mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes");
+        while (rowSet.next()) {
+            Likes like = mapToRow(rowSet);
             likes.add(like);
         }
         return likes;
@@ -44,9 +44,9 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
     @Override
     public Set<Likes> getLikesWithFilmId(int filmId) {
         Set<Likes> likes = new HashSet<>();
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where FilmID = ?", filmId);
-        while (RowSet.next()) {
-            var like = mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where FilmID = ?", filmId);
+        while (rowSet.next()) {
+            var like = mapToRow(rowSet);
             likes.add(like);
         }
         return likes;
@@ -54,17 +54,17 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
 
     @Override
     public Likes getLikesCurrentUserWithFilmId(int userId, int filmId) {
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where UserID = ? AND FilmID = ?", userId, filmId);
-        if (RowSet.next()) {
-            return mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where UserID = ? AND FilmID = ?", userId, filmId);
+        if (rowSet.next()) {
+            return mapToRow(rowSet);
         } else {
             return null;
         }
     }
 
-    private Likes mapToRow(SqlRowSet RowSet) {
-        int userId = RowSet.getInt("UserID");
-        int filmId = RowSet.getInt("FilmID");
+    private Likes mapToRow(SqlRowSet rowSet) {
+        int userId = rowSet.getInt("UserID");
+        int filmId = rowSet.getInt("FilmID");
         return Likes.builder()
                 .userId(userId)
                 .filmId(filmId)

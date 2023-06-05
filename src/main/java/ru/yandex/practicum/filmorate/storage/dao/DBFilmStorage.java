@@ -65,9 +65,9 @@ public class DBFilmStorage extends DbStorage implements FilmStorage {
 
     @Override
     public Film findFilmById(int id) {
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet("select id, Name, Description, ReleaseDate, Duration, MpaID from Films where id = ?", id);
-        if (RowSet.next()) {
-            return mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select id, Name, Description, ReleaseDate, Duration, MpaID from Films where id = ?", id);
+        if (rowSet.next()) {
+            return mapToRow(rowSet);
         } else {
             throw new FilmNotFoundException(String.format("Фильм c id %d не найден", id));
         }
@@ -77,21 +77,21 @@ public class DBFilmStorage extends DbStorage implements FilmStorage {
     public List<Film> findAllFilms() {
         List<Film> films = new ArrayList<>();
         String sql = "select id, Name, Description, ReleaseDate, Duration, MpaID from Films";
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet(sql);
-        while (RowSet.next()) {
-            Film film = mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
+            Film film = mapToRow(rowSet);
             films.add(film);
         }
         return films;
     }
 
-    private Film mapToRow(SqlRowSet RowSet) {
-        int mpaId = RowSet.getInt("MpaId");
-        int id = RowSet.getInt("id");
-        String name = RowSet.getString("Name");
-        String description = RowSet.getString("Description");
-        LocalDate date = RowSet.getDate("ReleaseDate").toLocalDate();
-        int duration = RowSet.getInt("Duration");
+    private Film mapToRow(SqlRowSet rowSet) {
+        int mpaId = rowSet.getInt("MpaId");
+        int id = rowSet.getInt("id");
+        String name = rowSet.getString("Name");
+        String description = rowSet.getString("Description");
+        LocalDate date = rowSet.getDate("ReleaseDate").toLocalDate();
+        int duration = rowSet.getInt("Duration");
         Mpa mpa = Mpa.builder()
                 .id(mpaId)
                 .build();
