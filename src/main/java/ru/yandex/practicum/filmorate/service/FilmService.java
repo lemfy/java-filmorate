@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.*;
@@ -17,17 +18,19 @@ public class FilmService {
     private final GenreStorage genreStorage;
     private final LikesStorage likesStorage;
     private final FilmGenreStorage filmGenreStorage;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public FilmService(FilmStorage filmStorage, UserStorage userStorage, MpaStorage mpaStorage,
-                           GenreStorage genreStorage, LikesStorage likesStorage,
-                           FilmGenreStorage filmGenreStorage) {
+                       GenreStorage genreStorage, LikesStorage likesStorage,
+                       FilmGenreStorage filmGenreStorage, JdbcTemplate jdbcTemplate) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.mpaStorage = mpaStorage;
         this.genreStorage = genreStorage;
         this.likesStorage = likesStorage;
         this.filmGenreStorage = filmGenreStorage;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public Film createFilm(Film film) {
@@ -44,15 +47,7 @@ public class FilmService {
     }
 
     public List<Film> findAllFilms() {
-        var films = filmStorage.findAllFilms();
-        var mpaList = mpaStorage.getAllMpa();
-        var genres = genreStorage.getAllGenres();
-        var filmGenres = filmGenreStorage.getAllFilmGenre();
-        var likes = likesStorage.getAllLikes();
-        for (var film : films) {
-            setAllPar(film, mpaList, genres, filmGenres, likes);
-        }
-        return films;
+        return filmStorage.findAllFilms();
     }
 
     public Film findFilmById(int filmId) {
