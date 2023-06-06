@@ -19,9 +19,9 @@ public class DBMpaStorage extends DbStorage implements MpaStorage {
 
     @Override
     public Mpa getMpaById(int id) {
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("name from Mpa where id = ?", id);
-        if (sqlRowSet.next()) {
-            return mapToRow(sqlRowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("name from Mpa where id = ?", id);
+        if (rowSet.next()) {
+            return mapToRow(rowSet);
         } else {
             throw new FilmNotFoundException("Рейтинг не найден");
         }
@@ -30,17 +30,17 @@ public class DBMpaStorage extends DbStorage implements MpaStorage {
     @Override
     public Set<Mpa> getAllMpa() {
         Set<Mpa> mpaList = new HashSet<>();
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select id");
-        while (sqlRowSet.next()) {
-            Mpa mpa = mapToRow(sqlRowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select id");
+        while (rowSet.next()) {
+            Mpa mpa = mapToRow(rowSet);
             mpaList.add(mpa);
         }
         return mpaList;
     }
 
-    private Mpa mapToRow(SqlRowSet sqlRowSet) {
-        int id = sqlRowSet.getInt("id");
-        String name = sqlRowSet.getString("name");
+    private Mpa mapToRow(SqlRowSet rowSet) {
+        int id = rowSet.getInt("id");
+        String name = rowSet.getString("name");
         return Mpa.builder()
                 .id(id)
                 .name(name)

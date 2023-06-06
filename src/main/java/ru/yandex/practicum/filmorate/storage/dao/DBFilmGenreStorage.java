@@ -30,9 +30,9 @@ public class DBFilmGenreStorage extends DbStorage implements FilmGenreStorage {
     @Override
     public List<FilmGenre> getLikesFilmId(int filmId) {
         List<FilmGenre> filmGenres = new ArrayList<>();
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select FilmID, GenreID from FilmGenre where FilmID = ?", filmId);
-        while (sqlRowSet.next()) {
-            var filmGenre = mapToRow(sqlRowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select FilmID, GenreID from FilmGenre where FilmID = ?", filmId);
+        while (rowSet.next()) {
+            var filmGenre = mapToRow(rowSet);
             filmGenres.add(filmGenre);
         }
         return filmGenres;
@@ -50,13 +50,13 @@ public class DBFilmGenreStorage extends DbStorage implements FilmGenreStorage {
 
     @Override
     public void deleteByFilmId(int filmId) {
-        var sqlRowSet = "delete from FilmGenre WHERE FilmID = ?";
-        jdbcTemplate.update(sqlRowSet, filmId);
+        var rowSet = "delete from FilmGenre WHERE FilmID = ?";
+        jdbcTemplate.update(rowSet, filmId);
     }
 
-    private FilmGenre mapToRow(SqlRowSet sqlRowSet) {
-        int genreId = sqlRowSet.getInt("GenreID");
-        int filmId = sqlRowSet.getInt("FilmID");
+    private FilmGenre mapToRow(SqlRowSet rowSet) {
+        int genreId = rowSet.getInt("GenreID");
+        int filmId = rowSet.getInt("FilmID");
         return FilmGenre.builder()
                 .genreId(genreId)
                 .filmId(filmId)

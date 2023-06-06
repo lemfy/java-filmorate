@@ -36,12 +36,12 @@ public class DBUserStorage implements UserStorage {
             .birthday(resultSet.getDate("birthday").toLocalDate())
             .build();
 
-    private User mapToRow(SqlRowSet sqlRowSet) {
-        int id = sqlRowSet.getInt("id");
-        String email = sqlRowSet.getString("email");
-        String login = sqlRowSet.getString("login");
-        String name = sqlRowSet.getString("name");
-        LocalDate birthday = sqlRowSet.getDate("birthday").toLocalDate();
+    private User mapToRow(SqlRowSet rowSet) {
+        int id = rowSet.getInt("id");
+        String email = rowSet.getString("email");
+        String login = rowSet.getString("login");
+        String name = rowSet.getString("name");
+        LocalDate birthday = rowSet.getDate("birthday").toLocalDate();
         return User.builder()
                 .id(id)
                 .email(email)
@@ -87,9 +87,9 @@ public class DBUserStorage implements UserStorage {
     public List<User> findAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "select id, email, login, name, birthday  from users";
-        SqlRowSet RowSet = jdbcTemplate.queryForRowSet(sql);
-        while (RowSet.next()) {
-            User user = mapToRow(RowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
+            User user = mapToRow(rowSet);
             users.add(user);
         }
         return users;
@@ -110,8 +110,8 @@ public class DBUserStorage implements UserStorage {
         boolean friendAccepted;
         String sqlGetReversFriend = "select * from friends " +
                 "where UserID = ? and FriendID = ?";
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
-        friendAccepted = sqlRowSet.next();
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
+        friendAccepted = rowSet.next();
         String sqlSetFriend = "insert into friends (UserID, FriendID, Status) " +
                 "values (?,?,?)";
         jdbcTemplate.update(sqlSetFriend, userId, friendId, friendAccepted);

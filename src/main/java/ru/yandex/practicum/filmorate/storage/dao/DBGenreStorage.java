@@ -19,9 +19,9 @@ public class DBGenreStorage extends DbStorage implements GenreStorage {
 
     @Override
     public Genres findGenreById(int id) {
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("name from genre where id = ?", id);
-        if (sqlRowSet.next()) {
-            return mapToRow(sqlRowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("name from genre where id = ?", id);
+        if (rowSet.next()) {
+            return mapToRow(rowSet);
         } else {
             throw new FilmNotFoundException("Жанр не найден");
         }
@@ -30,17 +30,17 @@ public class DBGenreStorage extends DbStorage implements GenreStorage {
     @Override
     public List<Genres> getAllGenres() {
         List<Genres> genres = new ArrayList<>();
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select id");
-        while (sqlRowSet.next()) {
-            Genres genre = mapToRow(sqlRowSet);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select id");
+        while (rowSet.next()) {
+            Genres genre = mapToRow(rowSet);
             genres.add(genre);
         }
         return genres;
     }
 
-    private Genres mapToRow(SqlRowSet sqlRowSet) {
-        int id = sqlRowSet.getInt("id");
-        String name = sqlRowSet.getString("name");
+    private Genres mapToRow(SqlRowSet rowSet) {
+        int id = rowSet.getInt("id");
+        String name = rowSet.getString("name");
         return Genres.builder()
                 .id(id)
                 .name(name)
