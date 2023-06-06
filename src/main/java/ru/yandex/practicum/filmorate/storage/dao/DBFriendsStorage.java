@@ -19,7 +19,7 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
         super(jdbcTemplate);
     }
 
-    private final RowMapper<Friends> FriendsRowMapper = (ResultSet resultSet, int rowNum) -> Friends.builder()
+    private final RowMapper<Friends> friendsRowMapper = (ResultSet resultSet, int rowNum) -> Friends.builder()
             .userId(resultSet.getInt("UserID"))
             .friendId(resultSet.getInt("FriendID"))
             .status(resultSet.getBoolean("Status"))
@@ -62,8 +62,8 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
         String sql = "select UserID, FriendID, Status from Friends where UserID = ? OR (FriendID = ? AND Status = ?)";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id, id, true);
         while (sqlRowSet.next()) {
-            Friends Friends1 = mapToRow(sqlRowSet);
-            friends.add(Friends1);
+            Friends friends1 = mapToRow(sqlRowSet);
+            friends.add(friends1);
         }
         return friends;
     }
@@ -73,7 +73,7 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
     public Friends findCommonFriends(int user1Id, int user2Id) {
         String query = "select UserID, FriendID, Status from Friends where UserID = ? AND FriendID = ? OR UserID = ? AND FriendID = ?";
         try {
-            return jdbcTemplate.queryForObject(query, FriendsRowMapper, user1Id, user2Id, user2Id, user1Id);
+            return jdbcTemplate.queryForObject(query, friendsRowMapper, user1Id, user2Id, user2Id, user1Id);
         } catch (Exception e) {
             return null;
         }
