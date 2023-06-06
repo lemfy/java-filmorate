@@ -1,5 +1,9 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -20,35 +24,43 @@ import java.util.List;
 import java.util.Map;
 
 @Component("DBFilmStorage")
+@Primary
 public class DBFilmStorage extends DbStorage implements FilmStorage {
+    private final Logger log = (Logger) LoggerFactory.getLogger(DBFilmStorage.class);
+    private final MpaStorage mpaStorage;
+    private final GenreStorage genreStorage;
+    private final LikesStorage likesStorage;
 
     public DBFilmStorage(JdbcTemplate jdbcTemplate, MpaStorage mpaStorage,
                          GenreStorage genreStorage, LikesStorage likesStorage) {
         super(jdbcTemplate);
+        this.mpaStorage = mpaStorage;
+        this.genreStorage = genreStorage;
+        this.likesStorage = likesStorage;
     }
 
     @Override
     public Film createFilm(Film film) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("Films")
+                .withTableName("films")
                 .usingGeneratedKeyColumns("id");
 
-        Map<String, Object> obj = new HashMap<>();
-        obj.put("Name", film.getName());
-        obj.put("Description", film.getDescription());
-        obj.put("ReleaseDate", film.getReleaseDate());
-        obj.put("Duration", film.getDuration());
-        obj.put("MpaID", film.getMpa().getId());
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("name", film.getName());
+        parameters.put("description", film.getDescription());
+        parameters.put("releaseDate", film.getReleaseDate());
+        parameters.put("duration", film.getDuration());
+        parameters.put("ratingMpaId", film.getMpa().getId());
 
-        Number userKey = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(obj));
+        Number userKey = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         film.setId(userKey.intValue());
         return film;
     }
 
     @Override
-    public Film changeFilm(int id, Film film) {
-        String updateSql = "update Films set Name = ?, Description = ?, ReleaseDate = ?, Duration = ?, MpaID = ? where id = ?";
+    public Film changeFilm(Film film) {
+        String updateSql = "update Films set name = ?, description = ?, releaseDate = ?, duration = ?, MPAID = ? where id = ?";
         if (jdbcTemplate.update(updateSql,
                 film.getName(),
                 film.getDescription(),
@@ -57,7 +69,8 @@ public class DBFilmStorage extends DbStorage implements FilmStorage {
                 film.getMpa().getId(),
                 film.getId())
                 <= 0) {
-            throw new FilmNotFoundException("Фильм не найден");
+            log.error("Фильм не найден {}", film.getId());
+            throw new FilmNotFoundException("Фильм не найден", HttpStatus.OK);
         } else {
             return film;
         }
@@ -65,33 +78,36 @@ public class DBFilmStorage extends DbStorage implements FilmStorage {
 
     @Override
     public Film findFilmById(int id) {
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select id, Name, Description, ReleaseDate, Duration, MpaID from Films where id = ?", id);
-        if (rowSet.next()) {
-            return mapToRow(rowSet);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select id, name, description, RELEASEDATE, duration, MPAID from FILMS where id = ?", id);
+        if (sqlRowSet.next()) {
+            return mapToRow(sqlRowSet);
         } else {
-            throw new FilmNotFoundException(String.format("Фильм c id %d не найден", id));
+            throw new FilmNotFoundException(String.format("Film's id %d doesn't found!", id), HttpStatus.OK);
         }
     }
 
     @Override
     public List<Film> findAllFilms() {
         List<Film> films = new ArrayList<>();
-        String sql = "select id, Name, Description, ReleaseDate, Duration, MpaID from Films";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
-        while (rowSet.next()) {
-            Film film = mapToRow(rowSet);
+        String sql = "select id, name, description, RELEASEDATE, duration, MPAID from films";
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        if (sqlRowSet.next()) {
+            Film film = mapToRow(sqlRowSet);
             films.add(film);
+        } else {
+            throw new FilmNotFoundException("Film's  doesn't found!", HttpStatus.OK);
         }
+        log.info("Количество фильмов: {}", films.size());
         return films;
     }
 
-    private Film mapToRow(SqlRowSet rowSet) {
-        int mpaId = rowSet.getInt("MpaId");
-        int id = rowSet.getInt("id");
-        String name = rowSet.getString("Name");
-        String description = rowSet.getString("Description");
-        LocalDate date = rowSet.getDate("ReleaseDate").toLocalDate();
-        int duration = rowSet.getInt("Duration");
+    private Film mapToRow(SqlRowSet sqlRowSet) {
+        int mpaId = sqlRowSet.getInt("ratingMpaId");
+        int id = sqlRowSet.getInt("id");
+        String name = sqlRowSet.getString("name");
+        String description = sqlRowSet.getString("description");
+        LocalDate date = sqlRowSet.getDate("releaseDate").toLocalDate();
+        int duration = sqlRowSet.getInt("duration");
         Mpa mpa = Mpa.builder()
                 .id(mpaId)
                 .build();

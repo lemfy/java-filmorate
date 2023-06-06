@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class DBGenreStorage extends DbStorage implements GenreStorage {
         if (rowSet.next()) {
             return mapToRow(rowSet);
         } else {
-            throw new FilmNotFoundException("Жанр не найден");
+            throw new FilmNotFoundException("Жанр не найден", HttpStatus.OK);
         }
     }
 
