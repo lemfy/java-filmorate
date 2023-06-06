@@ -7,7 +7,12 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Mpa {
+public class Mpa implements Comparable<Mpa> {
     private int id;
     private String name;
+
+    @Override
+    public int compareTo(Mpa o) {
+        return Integer.compare(this.id, o.id);
+    }
 }

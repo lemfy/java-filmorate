@@ -20,15 +20,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
-    private Set<Integer> likes;
-    private List<Genres> genres;
     @NotNull
     private Mpa mpa;
-
-    public final int getLikeSize() {
-        if (likes == null) {
-            return 0;
-        }
-        return likes.size();
-    }
+    private Set<Integer> likes;
+    private List<Genres> genres;
 }

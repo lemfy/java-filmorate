@@ -11,16 +11,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
     private final MpaStorage mpaStorage;
     private final GenreStorage genreStorage;
     private final LikesStorage likesStorage;
     private final FilmGenreStorage filmGenreStorage;
-    private final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, MpaStorage mpaStorage,
-                       GenreStorage genreStorage, LikesStorage likesStorage, FilmGenreStorage filmGenreStorage) {
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage, MpaStorage mpaStorage,
+                           GenreStorage genreStorage, LikesStorage likesStorage,
+                           FilmGenreStorage filmGenreStorage) {
         this.filmStorage = filmStorage;
+        this.userStorage = userStorage;
         this.mpaStorage = mpaStorage;
         this.genreStorage = genreStorage;
         this.likesStorage = likesStorage;
