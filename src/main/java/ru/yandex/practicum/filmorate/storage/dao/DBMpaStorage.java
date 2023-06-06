@@ -32,8 +32,8 @@ public class DBMpaStorage extends DbStorage implements MpaStorage {
         Set<Mpa> mpaList = new HashSet<>();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select id");
         while (sqlRowSet.next()) {
-            Mpa Mpa = mapToRow(sqlRowSet);
-            mpaList.add(Mpa);
+            Mpa mpa = mapToRow(sqlRowSet);
+            mpaList.add(mpa);
         }
         return mpaList;
     }
