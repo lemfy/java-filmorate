@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friends;
 import ru.yandex.practicum.filmorate.storage.FriendsStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -15,8 +16,11 @@ import java.util.List;
 @Component
 public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
-    public DBFriendsStorage(JdbcTemplate jdbcTemplate) {
+    private final UserStorage userStorage;
+
+    public DBFriendsStorage(JdbcTemplate jdbcTemplate, UserStorage userStorage) {
         super(jdbcTemplate);
+        this.userStorage = userStorage;
     }
 
     private final RowMapper<Friends> friendsRowMapper = (ResultSet resultSet, int rowNum) -> Friends.builder()
@@ -28,6 +32,8 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
     @Override
     public Friends addFriend(Friends friends) {
+        checkUserById(friends.getUserId());
+        checkUserById(friends.getFriendId());
         String sql = "insert into Friends (UserID, FriendID, Status) values(?, ?, ?)";
         jdbcTemplate.update(sql,
                 friends.getUserId(),
@@ -38,6 +44,8 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
     @Override
     public Friends update(Friends friends) {
+        checkUserById(friends.getUserId());
+        checkUserById(friends.getFriendId());
         String updateSql = "update Friends set Status = ? where UserID = ? AND FriendID = ?";
         if (jdbcTemplate.update(updateSql,
                 friends.isStatus(),
@@ -52,6 +60,8 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
     @Override
     public boolean deleteFriend(Friends friends) {
+        checkUserById(friends.getUserId());
+        checkUserById(friends.getFriendId());
         String sql = "delete from Friends where UserID=? AND FriendID=?";
         return (jdbcTemplate.update(sql, friends.getUserId(), friends.getFriendId()) > 0);
     }
@@ -88,5 +98,11 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
                 .friendId(friendID)
                 .status(status)
                 .build();
+    }
+
+    private void checkUserById(int userId) {
+        if (userStorage.findUserById(userId) == null) {
+            throw new UserNotFoundException("User with id " + userId + " doesn't found");
+        }
     }
 }
