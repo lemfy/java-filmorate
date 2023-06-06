@@ -22,7 +22,7 @@ import java.util.Map;
 @Component("DBFilmStorage")
 public class DBFilmStorage extends DbStorage implements FilmStorage {
 
-    public DBFilmStorage(JdbcTemplate jdbcTemplate, MpaStorage MpaStorage,
+    public DBFilmStorage(JdbcTemplate jdbcTemplate, MpaStorage mpaStorage,
                          GenreStorage genreStorage, LikesStorage likesStorage) {
         super(jdbcTemplate);
     }
