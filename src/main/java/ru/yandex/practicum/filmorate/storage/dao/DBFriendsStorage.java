@@ -27,33 +27,33 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
 
     @Override
-    public Friends addFriend(Friends Friends) {
+    public Friends addFriend(Friends friends) {
         String sql = "insert into Friends (UserID, FriendID, Status) values(?, ?, ?)";
         jdbcTemplate.update(sql,
-                Friends.getUserId(),
-                Friends.getFriendId(),
-                Friends.isStatus());
-        return Friends;
+                friends.getUserId(),
+                friends.getFriendId(),
+                friends.isStatus());
+        return friends;
     }
 
     @Override
-    public Friends update(Friends Friends) {
+    public Friends update(Friends friends) {
         String updateSql = "update Friends set Status = ? where UserID = ? AND FriendID = ?";
         if (jdbcTemplate.update(updateSql,
-                Friends.isStatus(),
-                Friends.getUserId(),
-                Friends.getFriendId())
+                friends.isStatus(),
+                friends.getUserId(),
+                friends.getFriendId())
                 <= 0) {
             throw new UserNotFoundException("Пользователя не существует");
         } else {
-            return Friends;
+            return friends;
         }
     }
 
     @Override
-    public boolean deleteFriend(Friends Friends) {
+    public boolean deleteFriend(Friends friends) {
         String sql = "delete from Friends where UserID=? AND FriendID=?";
-        return (jdbcTemplate.update(sql, Friends.getUserId(), Friends.getFriendId()) > 0);
+        return (jdbcTemplate.update(sql, friends.getUserId(), friends.getFriendId()) > 0);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
         String sql = "select UserID, FriendID, Status from Friends where UserID = ? OR (FriendID = ? AND Status = ?)";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id, id, true);
         while (sqlRowSet.next()) {
-            Friends Friends = mapToRow(sqlRowSet);
-            friends.add(Friends);
+            Friends Friends1 = mapToRow(sqlRowSet);
+            friends.add(Friends1);
         }
         return friends;
     }
@@ -81,11 +81,11 @@ public class DBFriendsStorage extends DbStorage implements FriendsStorage {
 
     private Friends mapToRow(SqlRowSet sqlRowSet) {
         int userId = sqlRowSet.getInt("UserID");
-        int FriendID = sqlRowSet.getInt("FriendID");
+        int friendID = sqlRowSet.getInt("FriendID");
         boolean status = sqlRowSet.getBoolean("Status");
         return Friends.builder()
                 .userId(userId)
-                .friendId(FriendID)
+                .friendId(friendID)
                 .status(status)
                 .build();
     }
