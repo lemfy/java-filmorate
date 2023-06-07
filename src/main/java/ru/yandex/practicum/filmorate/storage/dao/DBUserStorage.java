@@ -2,12 +2,13 @@ package ru.yandex.practicum.filmorate.storage.dao;
 
 import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -19,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component("DBUserStorage")
+@Repository("DBUserStorage")
+@Primary
 public class DBUserStorage implements UserStorage {
     private final Logger log = (Logger) LoggerFactory.getLogger(DBUserStorage.class);
     private final JdbcTemplate jdbcTemplate;
@@ -103,31 +105,5 @@ public class DBUserStorage implements UserStorage {
         } catch (Exception e) {
             throw new UserNotFoundException("Пользователь не найден!");
         }
-    }
-
-    @Override
-    public void addFriend(int userId, int friendId) {
-        boolean friendAccepted;
-        String sqlGetReversFriend = "select * from friends " +
-                "where UserID = ? and FriendID = ?";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
-        friendAccepted = rowSet.next();
-        String sqlSetFriend = "insert into friends (UserID, FriendID, Status) " +
-                "values (?,?,?)";
-        jdbcTemplate.update(sqlSetFriend, userId, friendId, friendAccepted);
-        if (friendAccepted) {
-            String sqlStatus = "update friends set Status = true " +
-                    "where UserID = ? and FriendID = ?";
-            jdbcTemplate.update(sqlStatus, friendId, userId);
-        }
-    }
-
-    @Override
-    public void removeFriend(int userId, int friendId) {
-        String sqlRemoveFriend = "delete from FRIENDSHIP where USERID = ? and FRIENDID = ?";
-        jdbcTemplate.update(sqlRemoveFriend, userId, friendId);
-        String sqlStatus = "update FRIENDSHIP set STATUS = false " +
-                "where USERID = ? and FRIENDID = ?";
-        jdbcTemplate.update(sqlStatus, friendId, userId);
     }
 }

@@ -12,55 +12,52 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/films")
 @AllArgsConstructor
 public class FilmController {
 
     private final FilmService filmService;
 
-    @GetMapping("/films")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Film> findAllFilms() {
-        return filmService.findAllFilms();
-    }
-
-    @PostMapping("/films")
+    @PostMapping
     public Film createFilm(@RequestBody @Valid Film film) {
-        log.info("Post request {}", film);
-        //    validate(film);
         log.info("Film added {}", film);
         return filmService.createFilm(film);
     }
 
-    @PutMapping("/films")
-    @ResponseStatus(HttpStatus.OK)
+    @PutMapping
     public Film changeFilm(@RequestBody @Valid Film film) {
-        log.info("Put request: {}", film);
-        //    validate(film);
         log.info("Film changed {}", film);
-        return filmService.changeFilm(film.getId(), film);
+        return filmService.changeFilm(film);
     }
 
-    @GetMapping("/films/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Film findFilmById(@PathVariable int id) {
+        log.info("Запрос фильма с id: {}", id);
         return filmService.findFilmById(id);
     }
 
-    @PutMapping("/films/{id}/like/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void putLike(@PathVariable("id") int filmId, @PathVariable("userId") int userId) {
-        filmService.addLike(filmId, userId);
+    @GetMapping
+    public List<Film> findAllFilms() {
+        log.info("Запрос всех фильмов");
+        return filmService.findAllFilms();
     }
 
-    @DeleteMapping("/films/{id}/like/{userId}")
+    @PutMapping("/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeLike(@PathVariable("id") int filmId, @PathVariable("userId") int userId) {
-        filmService.removeLike(filmId, userId);
+    public void putLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.addLike(id, userId);
     }
 
-    @GetMapping("/films/popular")
+    @DeleteMapping("/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Film> getBestFilms(@RequestParam(defaultValue = "10") Integer count) {
+    public void removeLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.removeLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Film> getBestFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.getBestFilms(count);
     }
 }

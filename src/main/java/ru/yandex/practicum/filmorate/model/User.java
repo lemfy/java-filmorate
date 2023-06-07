@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class User {
-    @Min(value = 0)
     private int id;
     @NotBlank(message = "Имейл не может быть пустым")
     @Email(message = "Невалидный Имейл")
@@ -20,5 +19,4 @@ public class User {
     private String name;
     @Past
     private LocalDate birthday;
-    //private Set<Integer> friends;
 }

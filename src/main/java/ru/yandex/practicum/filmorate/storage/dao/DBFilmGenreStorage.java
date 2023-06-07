@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.storage.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.storage.FilmGenreStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class DBFilmGenreStorage extends DbStorage implements FilmGenreStorage {
 
     public DBFilmGenreStorage(JdbcTemplate jdbcTemplate) {

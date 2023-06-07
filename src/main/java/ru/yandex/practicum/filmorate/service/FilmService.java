@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -40,12 +39,12 @@ public class FilmService {
         return film;
     }
 
-    public Film changeFilm(int id, Film film) {
+    public Film changeFilm(Film film) {
         validate(film);
         try {
             filmStorage.changeFilm(film);
         } catch (Exception e) {
-            throw new FilmNotFoundException("Такого фильма не существует!", HttpStatus.OK);
+            throw new FilmNotFoundException("Такого фильма не существует!");
         }
         filmGenreStorage.deleteByFilmId(film.getId());
         addGenreForFilm(film);
@@ -55,10 +54,15 @@ public class FilmService {
     public List<Film> findAllFilms() {
         log.info("Запрос фильмов");
         var films = filmStorage.findAllFilms();
+        log.info("Запрос фильмов1");
         var mpaList = mpaStorage.getAllMpa();
+        log.info("Запрос фильмов2");
         var genres = genreStorage.getAllGenres();
+        log.info("Запрос фильмов3");
         var filmGenres = filmGenreStorage.getAllFilmGenre();
+        log.info("Запрос фильмов4");
         var likes = likesStorage.getAllLikes();
+        log.info("Запрос фильмов5");
         for (var film : films) {
             setAllPar(film, mpaList, genres, filmGenres, likes);
         }
@@ -67,6 +71,7 @@ public class FilmService {
     }
 
     public Film findFilmById(int filmId) {
+        log.info("Запрос фильма по id");
         var film = filmStorage.findFilmById(filmId);
         var mpaList = mpaStorage.getAllMpa();
         var genres = genreStorage.getAllGenres();
@@ -86,7 +91,7 @@ public class FilmService {
     public void removeLike(int filmId, int userId) {
         Likes like = likesStorage.getLikesCurrentUserWithFilmId(userId, filmId);
         if (like == null) {
-            throw new FilmNotFoundException("лфйк не найден", HttpStatus.OK);
+            throw new FilmNotFoundException("лайк не найден");
         }
         likesStorage.removeLike(new Likes(filmId, userId));
     }
@@ -113,15 +118,13 @@ public class FilmService {
     public List<Mpa> getMpaList() {
         var mpaList = mpaStorage.getAllMpa();
         List<Mpa> list = new ArrayList<>(mpaList);
-        Collections.sort(list, Comparator.comparing(Mpa::getId));
+        list.sort(Comparator.comparing(Mpa::getId));
         return list;
     }
 
     private void addGenreForFilm(Film film) {
         if (film.getGenres() != null && film.getGenres().size() > 0) {
             List<Genres> ratingList = film.getGenres();
-            Set<Integer> set = new HashSet<>();
-            ratingList.removeIf(rating -> !set.add(rating.getId()));
             film.setGenres(ratingList);
             for (var genre : film.getGenres()) {
                 var filmGenre = new FilmGenre(film.getId(), genre.getId());
@@ -134,14 +137,11 @@ public class FilmService {
                            List<FilmGenre> filmGenres, Set<Likes> likes) {
         List<Genres> genreByFilm = new ArrayList<>();
         filmGenres.stream().filter(f -> f.getFilmId() == film.getId())
-                .forEach(f -> genreByFilm.add(
-                        new Genres(f.getGenreId(),
+                .forEach(f -> genreByFilm.add(new Genres(f.getGenreId(),
                                 genres.stream().filter(g -> g.getId() == f.getGenreId()).findAny().get().getName())));
 
         film.setGenres(genreByFilm);
-
         film.getMpa().setName(mpaList.stream().filter(m -> m.getId() == film.getMpa().getId()).findAny().get().getName());
-
         Set<Integer> likesByFilm = new HashSet<>();
         likes.stream().filter(l -> l.getFilmId() == film.getId()).forEach(l -> likesByFilm.add(l.getUserId()));
         film.setLikes(likesByFilm);

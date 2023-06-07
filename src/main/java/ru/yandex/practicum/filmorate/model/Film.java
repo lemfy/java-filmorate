@@ -11,7 +11,6 @@ import java.util.Set;
 @Data
 @Builder
 public class Film {
-    @Min(value = 0)
     private int id;
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
@@ -20,7 +19,6 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
-    @NotNull
     private Mpa mpa;
     private Set<Integer> likes;
     private List<Genres> genres;
