@@ -81,14 +81,14 @@ public class FilmService {
         return film;
     }
 
-    public void addLike(int filmId, int userId) {
+    public void addLike(int userId, int filmId) {
         Likes like = likesStorage.getLikesCurrentUserWithFilmId(userId, filmId);
         if (like == null) {
             likesStorage.addLike(new Likes(filmId, userId));
         }
     }
 
-    public void removeLike(int filmId, int userId) {
+    public void removeLike(int userId, int filmId) {
         Likes like = likesStorage.getLikesCurrentUserWithFilmId(userId, filmId);
         if (like == null) {
             throw new FilmNotFoundException("лайк не найден");

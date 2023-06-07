@@ -17,7 +17,7 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
 
     @Override
     public Likes addLike(Likes likes) {
-        String sql = "insert into Likes (UserID, FilmID) values(?, ?)";
+        String sql = "insert into Likes (FilmID, UserID) values(?, ?)";
         jdbcTemplate.update(sql,
                 likes.getUserId(),
                 likes.getFilmId());
@@ -26,14 +26,14 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
 
     @Override
     public void removeLike(Likes likes) {
-        var query = "delete from Likes where UserID = ? AND FilmID = ?";
+        var query = "delete from Likes where FilmID = ? AND UserID = ?";
         jdbcTemplate.update(query, likes.getUserId(), likes.getFilmId());
     }
 
     @Override
     public Set<Likes> getAllLikes() {
         Set<Likes> likes = new HashSet<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes");
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select FilmID, UserID from Likes");
         while (rowSet.next()) {
             Likes like = mapToRow(rowSet);
             likes.add(like);
@@ -44,7 +44,7 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
     @Override
     public Set<Likes> getLikesWithFilmId(int filmId) {
         Set<Likes> likes = new HashSet<>();
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where FilmID = ?", filmId);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select FilmID, UserID from Likes where FilmID = ?", filmId);
         while (rowSet.next()) {
             var like = mapToRow(rowSet);
             likes.add(like);
@@ -54,7 +54,7 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
 
     @Override
     public Likes getLikesCurrentUserWithFilmId(int userId, int filmId) {
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select UserID, FilmID from Likes where UserID = ? AND FilmID = ?", userId, filmId);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet("select FilmID, UserID from Likes where UserID = ? AND FilmID = ?", userId, filmId);
         if (rowSet.next()) {
             return mapToRow(rowSet);
         } else {
