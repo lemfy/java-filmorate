@@ -41,32 +41,30 @@ public class FilmService {
 
     public Film changeFilm(Film film) {
         validate(film);
+        log.info("Запрос изменения фильма1");
         try {
             filmStorage.changeFilm(film);
         } catch (Exception e) {
             throw new FilmNotFoundException("Такого фильма не существует!");
         }
+        log.info("Запрос изменения фильма2");
         filmGenreStorage.deleteByFilmId(film.getId());
+        log.info("Запрос изменения фильма3");
         addGenreForFilm(film);
+        log.info("Запрос изменения фильма4");
         return film;
     }
 
     public List<Film> findAllFilms() {
         log.info("Запрос фильмов");
         var films = filmStorage.findAllFilms();
-        log.info("Запрос фильмов1");
         var mpaList = mpaStorage.getAllMpa();
-        log.info("Запрос фильмов2");
         var genres = genreStorage.getAllGenres();
-        log.info("Запрос фильмов3");
         var filmGenres = filmGenreStorage.getAllFilmGenre();
-        log.info("Запрос фильмов4");
         var likes = likesStorage.getAllLikes();
-        log.info("Запрос фильмов5");
         for (var film : films) {
             setAllPar(film, mpaList, genres, filmGenres, likes);
         }
-        log.info("Запрос фильмов123");
         return films;
     }
 
@@ -125,6 +123,8 @@ public class FilmService {
     private void addGenreForFilm(Film film) {
         if (film.getGenres() != null && film.getGenres().size() > 0) {
             List<Genres> ratingList = film.getGenres();
+            Set<Integer> uniqueId = new HashSet<>();
+            ratingList.removeIf(rating -> !uniqueId.add(rating.getId()));
             film.setGenres(ratingList);
             for (var genre : film.getGenres()) {
                 var filmGenre = new FilmGenre(film.getId(), genre.getId());

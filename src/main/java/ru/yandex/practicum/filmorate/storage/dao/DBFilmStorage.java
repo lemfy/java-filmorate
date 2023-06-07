@@ -64,7 +64,7 @@ public class DBFilmStorage extends DbStorage implements FilmStorage {
 
     @Override
     public Film findFilmById(int id) {
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select id, name, description, RELEASEDATE, duration, MPAID from FILMS where id = ?", id);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select id, name, description, releaseDate, duration, MpaId from Films where id = ?", id);
         if (sqlRowSet.next()) {
             return mapToRow(sqlRowSet);
         } else {
