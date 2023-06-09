@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.Likes;
 import java.util.Set;
 
 public interface LikesStorage {
-    Likes addLike(Likes likes);
+    void addLike(Likes likes);
 
     void removeLike(Likes likes);
 

@@ -5,9 +5,9 @@ import ru.yandex.practicum.filmorate.model.FilmGenre;
 import java.util.List;
 
 public interface FilmGenreStorage {
-    void deleteByFilmId(int filmId);
-
     FilmGenre add(FilmGenre filmGenre);
+
+    void deleteByFilmId(int filmId);
 
     List<FilmGenre> getLikesFilmId(int filmId);
 

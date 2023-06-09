@@ -16,12 +16,11 @@ public class DBLikesStorage extends DbStorage implements LikesStorage {
     }
 
     @Override
-    public Likes addLike(Likes likes) {
+    public void addLike(Likes likes) {
         String sql = "insert into Likes (FilmID, UserID) values(?, ?)";
         jdbcTemplate.update(sql,
                 likes.getUserId(),
                 likes.getFilmId());
-        return likes;
     }
 
     @Override
