@@ -1,17 +1,18 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
-    @Min(value = 0)
     private int id;
     @NotBlank(message = "Имейл не может быть пустым")
     @Email(message = "Невалидный Имейл")
@@ -22,5 +23,4 @@ public class User {
     private String name;
     @Past
     private LocalDate birthday;
-    private Set<Integer> friends;
 }

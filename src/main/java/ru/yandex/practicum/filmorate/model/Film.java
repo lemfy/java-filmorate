@@ -1,20 +1,20 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Film {
-    @Min(value = 0)
     private int id;
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
@@ -23,12 +23,16 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
+    private Mpa mpa;
     private Set<Integer> likes;
+    private List<Genres> genres;
 
-    public final int getLikeSize() {
-        if (likes == null) {
-            return 0;
-        }
-        return likes.size();
+    public Film(int id, String name, String description, LocalDate releaseDate, int duration, Mpa mpa) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
     }
 }
